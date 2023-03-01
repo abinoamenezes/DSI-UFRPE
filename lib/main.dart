@@ -81,6 +81,8 @@ class _RandomWordsState extends State<RandomWords> {
                   pair.asPascalCase,
                   style: _biggerFont,
                 ),
+                trailing: IconButton(
+                    icon: const Icon(Icons.remove), onPressed: () {}),
               );
             },
           );
