@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
 
 class _RandomWordsState extends State<RandomWords> {
   final _suggestions = <WordPair>[];
-  final _saved = <WordPair>{};
+  final _saved = <WordPair>[];
   final _biggerFont = const TextStyle(fontSize: 18);
 
   @override
