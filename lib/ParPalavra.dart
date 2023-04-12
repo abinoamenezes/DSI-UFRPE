@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:english_words/english_words.dart';
 
 class ParPalavra {
@@ -6,23 +7,24 @@ class ParPalavra {
 
   ParPalavra(this.firstWord, this.secondWord);
 
-//factory to create new words using the Word Pair base
+// Factory -> criar novas palavras usando a base Word Pair
   factory ParPalavra.constructor() {
     WordPair word = generateWordPairs().first;
     ParPalavra p = ParPalavra(word.first, word.second);
     return p;
   }
 
-//function to LowerCase de second part of a word
+// Function -> Transforma a segunda parte de uma palavra em LowerCase
   String lowerCase(String word) {
     return word.toLowerCase();
   }
 
-//function to change a word to a pascal case
+// Function -> Muda as palavras para PascalCase
+  // ignore: non_constant_identifier_names
   String CreateAsPascalCase() {
     return "${firstWord[0].toUpperCase() + lowerCase(firstWord.substring(1))}${secondWord[0].toUpperCase() + lowerCase(secondWord.substring(1))}";
   }
 
-//var that receive the pascal case create function
+// Var que recebe o PascalCase da function
   late final asPascalCase = CreateAsPascalCase();
 }

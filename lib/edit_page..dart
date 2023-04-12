@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
 import 'ParPalavra.dart';
 
@@ -15,6 +16,7 @@ class _EditScreenState extends State<EditScreen> {
     final args = (ModalRoute.of(context)?.settings.arguments ??
         <List, ParPalavra>{}) as Map;
     var palavra = args['palavra'];
+    // ignore: non_constant_identifier_names
     List<ParPalavra> ParPalavraList = args['parPalavra'];
     final TextEditingController wordOne = TextEditingController();
     final TextEditingController wordTwo = TextEditingController();
@@ -24,19 +26,21 @@ class _EditScreenState extends State<EditScreen> {
           title: const Text('Edit Word'),
         ),
         body: Container(
-          padding: EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0),
           child: Form(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               TextFormField(
                 keyboardType: TextInputType.text,
-                decoration: const InputDecoration(hintText: "Type First Word"),
+                decoration: const InputDecoration(
+                    hintText: "Insira a primeira palavra"),
                 controller: wordOne,
               ),
               TextFormField(
                 keyboardType: TextInputType.text,
-                decoration: const InputDecoration(hintText: "Type Second Word"),
+                decoration:
+                    const InputDecoration(hintText: "Insira a segunda palavra"),
                 controller: wordTwo,
               ),
               Center(
@@ -44,8 +48,9 @@ class _EditScreenState extends State<EditScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          primary: Color.fromARGB(255, 81, 68, 255),
-                          fixedSize: Size(100, 40)),
+                          // ignore: deprecated_member_use
+                          primary: const Color.fromARGB(255, 255, 0, 0),
+                          fixedSize: const Size(100, 40)),
                       onPressed: () {
                         setState(() {
                           if (palavra == true) {

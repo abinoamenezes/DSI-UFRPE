@@ -1,14 +1,15 @@
-import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
-import 'package:startup_namer/RepositoryParPalavra.dart';
-import 'edit_page.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'RepositoryParPalavra.dart';
+import 'edit_page..dart';
 import 'ParPalavra.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-RepositoryParPalavra repositoryParPalavra = new RepositoryParPalavra();
+RepositoryParPalavra repositoryParPalavra = RepositoryParPalavra();
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -16,17 +17,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Welcome to Flutter',
+      title: 'Startup Name Generator',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.white,
-            foregroundColor: Color.fromARGB(255, 81, 68, 255)),
+            backgroundColor: Colors.white, foregroundColor: Colors.black),
       ),
       initialRoute: '/',
       routes: {
         RandomWords.routeName: (context) => const RandomWords(),
-        EditScreen.routeName: (context) => const EditScreen()
+        EditScreen.routeName: (context) => const EditScreen(),
       },
     );
   }
@@ -37,14 +37,15 @@ class RandomWords extends StatefulWidget {
   static const routeName = '/';
 
   @override
+  // ignore: library_private_types_in_public_api
   _RandomWordsState createState() => _RandomWordsState();
 }
 
 class _RandomWordsState extends State<RandomWords> {
-  final _biggerFont = const TextStyle(fontSize: 18.0);
-  final _saved = <ParPalavra>[];
+  final _saved = <ParPalavra>{};
+  final _biggerFont = const TextStyle(fontSize: 18);
   bool cardMode = false;
-  bool screenEditMode = false;
+  bool screenEditmode = false;
   String nome = "Startup Name Generator";
 
   @override
@@ -73,27 +74,26 @@ class _RandomWordsState extends State<RandomWords> {
               }),
               tooltip:
                   cardMode ? 'List Vizualization' : 'Card Mode Vizualization',
-              icon: Icon(Icons.auto_fix_normal_outlined),
+              icon: const Icon(Icons.auto_fix_normal_outlined),
             ),
             IconButton(
-              icon: const Icon(Icons.plus_one),
-              tooltip: 'Add new word',
-              onPressed: () {
-                screenEditMode = true;
-                setState(() {
-                  Navigator.popAndPushNamed(context, '/edit', arguments: {
-                    'parPalavra': repositoryParPalavra.getAll(),
-                    'palavra': screenEditMode
+                icon: const Icon(Icons.plus_one),
+                tooltip: 'Add new word',
+                onPressed: () {
+                  screenEditmode = true;
+                  setState(() {
+                    Navigator.popAndPushNamed(context, '/edit', arguments: {
+                      'parPalavra': repositoryParPalavra.getAll(),
+                      'palavra': screenEditmode
+                    });
                   });
-                });
-              },
-            )
+                }),
           ],
         ),
         body: _buildSuggestions(cardMode));
   }
 
-//Favorites Screen
+  // Tela de favoritos
   void _pushSaved() {
     Navigator.of(context).push(
       MaterialPageRoute<void>(builder: (BuildContext context) {
@@ -124,21 +124,27 @@ class _RandomWordsState extends State<RandomWords> {
     );
   }
 
-//Building Suggestions
+  // Construindo sugestoes
   Widget _buildSuggestions(bool cardMode) {
-    print('list mode changed');
+    if (kDebugMode) {
+      print('list mode changed');
+    }
 
     if (cardMode == false) {
       return ListView.builder(
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (context, i) {
           if (i.isOdd) return const Divider();
-          print("list view");
+          if (kDebugMode) {
+            print("list view");
+          }
           final index = i ~/ 2;
 
           if (index >= repositoryParPalavra.getAll().length) {
             repositoryParPalavra.CreateParPalavra(10);
-            print("create word");
+            if (kDebugMode) {
+              print("create word");
+            }
           }
           return _buildRow(repositoryParPalavra.getByIndex(index));
         },
@@ -148,13 +154,15 @@ class _RandomWordsState extends State<RandomWords> {
     }
   }
 
-//Building list Rows
+  // Lista de construcao de linhas
   Widget _buildRow(ParPalavra pair) {
-    print("build row");
+    if (kDebugMode) {
+      print("build row");
+    }
     final alreadySaved = _saved.contains(pair);
     var color = Colors.transparent;
     return Dismissible(
-        key: UniqueKey(),
+        key: Key(pair.toString()),
         direction: DismissDirection.endToStart,
         onDismissed: (direction) {
           setState(() {
@@ -165,11 +173,11 @@ class _RandomWordsState extends State<RandomWords> {
           });
         },
         background: Container(
-          color: Color.fromARGB(255, 81, 68, 255),
-          padding: EdgeInsets.all(8.0),
+          color: const Color.fromARGB(255, 255, 0, 0),
+          padding: const EdgeInsets.all(8.0),
           alignment: Alignment.centerRight,
-          child: Text(
-            "Excluir",
+          child: const Text(
+            "Deletar",
             style: TextStyle(
               color: Colors.white,
               fontSize: 20,
@@ -184,8 +192,9 @@ class _RandomWordsState extends State<RandomWords> {
             trailing: IconButton(
                 icon: Icon(
                     alreadySaved ? Icons.favorite : Icons.favorite_border,
-                    color:
-                        alreadySaved ? Color.fromARGB(255, 81, 68, 255) : null,
+                    color: alreadySaved
+                        ? const Color.fromARGB(255, 255, 0, 0)
+                        : null,
                     semanticLabel: alreadySaved ? 'Remove from saved' : 'Save'),
                 tooltip: "Favorite",
                 hoverColor: color,
@@ -208,12 +217,14 @@ class _RandomWordsState extends State<RandomWords> {
             }));
   }
 
-//Building cards vizualization
+  // Construcao de cards de visualizacao
   Widget _cardVizualizaton() {
-    print('card mode changed');
+    if (kDebugMode) {
+      print('card mode changed');
+    }
     return GridView.builder(
-      padding: EdgeInsets.all(10),
-      gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+      padding: const EdgeInsets.all(12),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 2,
           mainAxisSpacing: 2,
